@@ -1,3 +1,4 @@
+use crate::logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn};
 use color_eyre::eyre::Ok;
 use ratatui::{
     DefaultTerminal, Frame,
@@ -8,7 +9,11 @@ use ratatui::{
 };
 use std::array;
 
-use crate::logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn};
+struct Data {
+    white_turn: bool,
+    white_score: i32,
+    black_score: i32,
+}
 
 pub fn start() -> color_eyre::Result<()> {
     color_eyre::install()?;
@@ -23,6 +28,11 @@ pub fn start() -> color_eyre::Result<()> {
 }
 
 fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
+    let mut data = Data {
+        white_turn: true,
+        white_score: 0,
+        black_score: 0,
+    };
     let mut board = set_board();
     let mut display = set_display();
     let mut color_display = set_color(board.clone());
@@ -86,121 +96,258 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                         } else {
                             next_row = row;
                             next_col = col;
+                            if data.white_turn {
+                                match board[current_row][current_col].as_str() {
+                                    "WP" => {
+                                        let nboard = w_pawn(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = w_pawn(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = false;
+                                        }
+                                    }
+                                    "WR" => {
+                                        let nboard = rook(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = rook(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = false;
+                                        }
+                                    }
+                                    "WB" => {
+                                        let nboard = bishop(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = bishop(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = false;
+                                        }
+                                    }
+                                    "WK" => {
+                                        let nboard = king(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = king(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = false;
+                                        }
+                                    }
+                                    "WQ" => {
+                                        let nboard = queen(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = queen(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = false;
+                                        }
+                                    }
+                                    "WN" => {
+                                        let nboard = knight(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = knight(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = false;
+                                        }
+                                    }
+                                    _ => {}
+                                }
+                            } else {
+                                match board[current_row][current_col].as_str() {
+                                    "BP" => {
+                                        let nboard = b_pawn(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = b_pawn(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = true;
+                                        }
+                                    }
 
-                            match board[current_row][current_col].as_str() {
-                                "WP" => {
-                                    board =
-                                        w_pawn(board, current_row, current_col, next_row, next_col);
-                                    display = w_pawn(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
+                                    "BR" => {
+                                        let nboard = rook(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = rook(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = true;
+                                        }
+                                    }
+                                    "BB" => {
+                                        let nboard = bishop(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = bishop(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = true;
+                                        }
+                                    }
+
+                                    "BK" => {
+                                        let nboard = king(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = king(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = true;
+                                        }
+                                    }
+
+                                    "BQ" => {
+                                        let nboard = queen(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = queen(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = true;
+                                        }
+                                    }
+                                    "BN" => {
+                                        let nboard = knight(
+                                            board.clone(),
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        display = knight(
+                                            display,
+                                            current_row,
+                                            current_col,
+                                            next_row,
+                                            next_col,
+                                        );
+                                        if board != nboard {
+                                            board = nboard;
+                                            data.white_turn = true;
+                                        }
+                                    }
+
+                                    _ => {}
                                 }
-                                "BP" => {
-                                    board =
-                                        b_pawn(board, current_row, current_col, next_row, next_col);
-                                    display = b_pawn(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
-                                }
-                                "WR" => {
-                                    board =
-                                        rook(board, current_row, current_col, next_row, next_col);
-                                    display =
-                                        rook(display, current_row, current_col, next_row, next_col);
-                                }
-                                "BR" => {
-                                    board =
-                                        rook(board, current_row, current_col, next_row, next_col);
-                                    display =
-                                        rook(display, current_row, current_col, next_row, next_col);
-                                }
-                                "BB" => {
-                                    board =
-                                        bishop(board, current_row, current_col, next_row, next_col);
-                                    display = bishop(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
-                                }
-                                "WB" => {
-                                    board =
-                                        bishop(board, current_row, current_col, next_row, next_col);
-                                    display = bishop(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
-                                }
-                                "WK" => {
-                                    board =
-                                        king(board, current_row, current_col, next_row, next_col);
-                                    display =
-                                        king(display, current_row, current_col, next_row, next_col);
-                                }
-                                "BK" => {
-                                    board =
-                                        king(board, current_row, current_col, next_row, next_col);
-                                    display =
-                                        king(display, current_row, current_col, next_row, next_col);
-                                }
-                                "WQ" => {
-                                    board =
-                                        queen(board, current_row, current_col, next_row, next_col);
-                                    display = queen(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
-                                }
-                                "BQ" => {
-                                    board =
-                                        queen(board, current_row, current_col, next_row, next_col);
-                                    display = queen(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
-                                }
-                                "BN" => {
-                                    board =
-                                        knight(board, current_row, current_col, next_row, next_col);
-                                    display = knight(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
-                                }
-                                "WN" => {
-                                    board =
-                                        knight(board, current_row, current_col, next_row, next_col);
-                                    display = knight(
-                                        display,
-                                        current_row,
-                                        current_col,
-                                        next_row,
-                                        next_col,
-                                    );
-                                }
-                                _ => {}
                             }
 
                             color_display = set_color(board.clone());
