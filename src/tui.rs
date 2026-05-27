@@ -8,7 +8,7 @@ use ratatui::{
 };
 use std::array;
 
-use crate::logic::{b_pawn, bishop, rook, w_pawn};
+use crate::logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn};
 
 pub fn start() -> color_eyre::Result<()> {
     color_eyre::install()?;
@@ -126,6 +126,73 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                     board =
                                         bishop(board, current_row, current_col, next_row, next_col);
                                     display = bishop(
+                                        display,
+                                        current_row,
+                                        current_col,
+                                        next_row,
+                                        next_col,
+                                    );
+                                }
+                                "WB" => {
+                                    board =
+                                        bishop(board, current_row, current_col, next_row, next_col);
+                                    display = bishop(
+                                        display,
+                                        current_row,
+                                        current_col,
+                                        next_row,
+                                        next_col,
+                                    );
+                                }
+                                "WK" => {
+                                    board =
+                                        king(board, current_row, current_col, next_row, next_col);
+                                    display =
+                                        king(display, current_row, current_col, next_row, next_col);
+                                }
+                                "BK" => {
+                                    board =
+                                        king(board, current_row, current_col, next_row, next_col);
+                                    display =
+                                        king(display, current_row, current_col, next_row, next_col);
+                                }
+                                "WQ" => {
+                                    board =
+                                        queen(board, current_row, current_col, next_row, next_col);
+                                    display = queen(
+                                        display,
+                                        current_row,
+                                        current_col,
+                                        next_row,
+                                        next_col,
+                                    );
+                                }
+                                "BQ" => {
+                                    board =
+                                        queen(board, current_row, current_col, next_row, next_col);
+                                    display = queen(
+                                        display,
+                                        current_row,
+                                        current_col,
+                                        next_row,
+                                        next_col,
+                                    );
+                                }
+                                "BN" => {
+                                    board =
+                                        knight(board, current_row, current_col, next_row, next_col);
+                                    display = knight(
+                                        display,
+                                        current_row,
+                                        current_col,
+                                        next_row,
+                                        next_col,
+                                    );
+                                }
+                                "WN" => {
+                                    board =
+                                        knight(board, current_row, current_col, next_row, next_col);
+                                    display = knight(
                                         display,
                                         current_row,
                                         current_col,
@@ -276,14 +343,14 @@ fn set_board() -> [[String; 8]; 8] {
 fn set_display() -> [[String; 8]; 8] {
     let mut display_board: [[String; 8]; 8] =
         array::from_fn(|_| array::from_fn(|_| String::from(".")));
-    display_board[7][0] = "\n|_|_|\n ( )\n[___]".to_string();
-    display_board[7][1] = "\n|\\\n ( \\\n[___]".to_string();
-    display_board[7][2] = "\n o\n ( )\n[___]".to_string();
-    display_board[7][3] = "\n www\n ( )\n[___]".to_string();
-    display_board[7][4] = "\n -+-\n ( )\n[___]".to_string();
-    display_board[7][5] = "\n o\n ( )\n[___]".to_string();
-    display_board[7][6] = "\n|\\\n ( \\\n[___]".to_string();
-    display_board[7][7] = "\n|_|_|\n ( )\n[___]".to_string();
+    display_board[7][0] = "|_|_|\n ( )\n[___]".to_string();
+    display_board[7][1] = "|\\\n ( \\\n[___]".to_string();
+    display_board[7][2] = " o\n ( )\n[___]".to_string();
+    display_board[7][3] = " www\n ( )\n[___]".to_string();
+    display_board[7][4] = " -+-\n ( )\n[___]".to_string();
+    display_board[7][5] = " o\n ( )\n[___]".to_string();
+    display_board[7][6] = "|\\\n ( \\\n[___]".to_string();
+    display_board[7][7] = "|_|_|\n ( )\n[___]".to_string();
     for row in 0..8 {
         display_board[1][row] = "[___]\n ( )".to_string();
         display_board[6][row] = "\n ( )\n[___]".to_string();

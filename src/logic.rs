@@ -75,11 +75,79 @@ pub fn bishop(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let count_row = nrow.abs_diff(row);
+    let count_col = ncol.abs_diff(col);
     if board[nrow][ncol] == ".".to_string() {
-        if ncol == col + 1 && nrow == row + 1 {
+        if count_row == count_col {
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
-        } else if ncol == col + 2 && nrow == row + 2 {
+        }
+    }
+
+    return board;
+}
+
+pub fn king(
+    mut board: [[String; 8]; 8],
+    row: usize,
+    col: usize,
+    nrow: usize,
+    ncol: usize,
+) -> [[String; 8]; 8] {
+    let value = board[row][col].clone();
+    let count_row = nrow.abs_diff(row);
+    let count_col = ncol.abs_diff(col);
+    if board[nrow][ncol] == ".".to_string() {
+        if (count_row == 1 || count_row == 0) && (count_col == 1 || count_col == 0) {
+            board[nrow][ncol] = value;
+            board[row][col] = ".".to_string();
+        }
+    }
+
+    return board;
+}
+
+pub fn queen(
+    mut board: [[String; 8]; 8],
+    row: usize,
+    col: usize,
+    nrow: usize,
+    ncol: usize,
+) -> [[String; 8]; 8] {
+    let value = board[row][col].clone();
+    let count_row = nrow.abs_diff(row);
+    let count_col = ncol.abs_diff(col);
+    if board[nrow][ncol] == ".".to_string() {
+        if count_row == count_col {
+            board[nrow][ncol] = value;
+            board[row][col] = ".".to_string();
+        } else if nrow == row {
+            board[nrow][ncol] = value;
+            board[row][col] = ".".to_string();
+        } else if ncol == col {
+            board[nrow][ncol] = value;
+            board[row][col] = ".".to_string();
+        }
+    }
+
+    return board;
+}
+
+pub fn knight(
+    mut board: [[String; 8]; 8],
+    row: usize,
+    col: usize,
+    nrow: usize,
+    ncol: usize,
+) -> [[String; 8]; 8] {
+    let value = board[row][col].clone();
+    let count_row = nrow.abs_diff(row);
+    let count_col = ncol.abs_diff(col);
+    if board[nrow][ncol] == ".".to_string() {
+        if (count_row == 2) && (count_col == 1) {
+            board[nrow][ncol] = value;
+            board[row][col] = ".".to_string();
+        } else if (count_col == 2) && (count_row == 1) {
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
         }
