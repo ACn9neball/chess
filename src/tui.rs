@@ -1,4 +1,4 @@
-use crate::logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn};
+use crate::logic::{self, b_pawn, bishop, king, knight, queen, rook, w_pawn};
 use color_eyre::eyre::Ok;
 use ratatui::{
     DefaultTerminal, Frame,
@@ -44,6 +44,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
     let mut current_col = 8;
     let mut next_row;
     let mut next_col;
+    let mut white_moves: Vec<String> = vec![];
+    let mut black_moves: Vec<String> = vec![];
 
     loop {
         terminal.draw(|frame| {
@@ -54,6 +56,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                 &current_col,
                 display.clone(),
                 color_display.clone(),
+                white_moves.clone(),
+                black_moves.clone(),
             )
         })?;
 
@@ -90,6 +94,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                         }
                     }
                     KeyCode::Enter => {
+                        let mut m = String::new();
+                        if let Some(mutex) = logic::GLOBAL_MOVE.get() {
+                            let val = mutex.lock().unwrap();
+                            m = val.clone();
+                        }
+
                         if current_row == 8 && current_col == 8 {
                             current_row = row;
                             current_col = col;
@@ -107,10 +117,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
+                                            white_moves.push(m);
                                         }
                                     }
                                     "WR" => {
@@ -122,8 +133,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
                                         }
@@ -137,8 +148,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
                                         }
@@ -152,8 +163,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
                                         }
@@ -167,8 +178,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
                                         }
@@ -182,8 +193,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
                                         }
@@ -201,10 +212,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
+                                            black_moves.push(m);
                                         }
                                     }
 
@@ -217,8 +229,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
                                         }
@@ -232,8 +244,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
                                         }
@@ -248,8 +260,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
                                         }
@@ -264,8 +276,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
                                         }
@@ -279,8 +291,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_col,
                                         );
 
-                                        display = set_display(nboard.clone());
                                         if board != nboard {
+                                            display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
                                         }
@@ -311,10 +323,18 @@ fn render(
     pcol: &usize,
     display: [[String; 8]; 8],
     color_display: [[Color; 8]; 8],
+    white_moves: Vec<String>,
+    black_moves: Vec<String>,
 ) {
     let screen = frame.area();
     let split = Layout::horizontal([Constraint::Ratio(8, 16), Constraint::Ratio(8, 16)]);
     let [left, right] = split.areas(screen);
+    let right_split = Layout::horizontal([
+        Constraint::Percentage(10),
+        Constraint::Fill(1),
+        Constraint::Fill(1),
+    ]);
+    let [num, white, black] = right_split.areas(right);
     let split = Layout::vertical([Constraint::Ratio(8, 9), Constraint::Ratio(1, 9)]);
     let [board, bottom] = split.areas(left);
 
@@ -399,6 +419,19 @@ fn render(
                 }
             }
         }
+        let mut numbers = String::new();
+        let mut blacks = String::new();
+        let mut whites = String::new();
+        for i in 0..white_moves.len() {
+            numbers += format!("{}.\n", (i + 1)).as_str();
+            whites += format!("{}.\n", white_moves[i]).as_str();
+        }
+        for i in 0..black_moves.len() {
+            blacks += format!("{}.\n", black_moves[i]).as_str();
+        }
+        frame.render_widget(Paragraph::new(numbers), num);
+        frame.render_widget(Paragraph::new(whites), white);
+        frame.render_widget(Paragraph::new(blacks), black);
     }
 }
 

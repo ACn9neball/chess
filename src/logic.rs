@@ -1,3 +1,11 @@
+use std::sync::{Mutex, OnceLock};
+
+pub static GLOBAL_MOVE: OnceLock<Mutex<String>> = OnceLock::new();
+
+fn get_global_move() -> &'static Mutex<String> {
+    GLOBAL_MOVE.get_or_init(|| Mutex::new(String::from("")))
+}
+
 pub fn w_pawn(
     mut board: [[String; 8]; 8],
     row: usize,
@@ -6,6 +14,9 @@ pub fn w_pawn(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let mutex = get_global_move();
+    let mut data = mutex.lock().unwrap();
+    let pos = position(nrow, ncol);
     if nrow > 0 {
         if board[nrow][ncol] == ".".to_string() {
             if row == 6 && (nrow == 5 || nrow == 4) && col == ncol {
@@ -19,8 +30,8 @@ pub fn w_pawn(
             } else if nrow == (row - 1) && col == ncol {
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
-            } else if nrow == 0 {
             }
+            *data = String::from(pos);
         } else if board[nrow][ncol].starts_with("B") && board[nrow][ncol] != "BK".to_string() {
             if nrow == (row - 1) && ncol == (col - 1) {
                 board[nrow][ncol] = value;
@@ -29,6 +40,8 @@ pub fn w_pawn(
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
+            let capture = format!("{}x{}", capture_pos(col), pos);
+            *data = String::from(capture);
         }
     }
 
@@ -43,6 +56,9 @@ pub fn b_pawn(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let mutex = get_global_move();
+    let mut data = mutex.lock().unwrap();
+    let pos = position(nrow, ncol);
     if nrow < 7 {
         if board[nrow][ncol] == ".".to_string() {
             if row == 1 && (nrow == 2 || nrow == 3) && col == ncol {
@@ -56,8 +72,8 @@ pub fn b_pawn(
             } else if nrow == (row + 1) && col == ncol {
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
-            } else if nrow == 7 {
             }
+            *data = String::from(pos);
         } else if board[nrow][ncol].starts_with("W") && board[nrow][ncol] != "WK".to_string() {
             if nrow == (row + 1) && ncol == (col - 1) {
                 board[nrow][ncol] = value;
@@ -66,6 +82,8 @@ pub fn b_pawn(
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
+            let capture = format!("{}x{}", capture_pos(col), pos);
+            *data = String::from(capture);
         }
     }
 
@@ -298,4 +316,45 @@ pub fn knight(
     }
 
     return board;
+}
+
+fn position(nrow: usize, ncol: usize) -> String {
+    let str_col = match ncol {
+        0 => "a",
+        1 => "b",
+        2 => "c",
+        3 => "d",
+        4 => "e",
+        5 => "f",
+        6 => "g",
+        7 => "h",
+        _ => "",
+    };
+    let str_row = match nrow {
+        0 => "8",
+        1 => "7",
+        2 => "6",
+        3 => "5",
+        4 => "4",
+        5 => "3",
+        6 => "2",
+        7 => "1",
+        _ => "",
+    };
+    return format!("{}{}", str_col, str_row);
+}
+
+fn capture_pos(col: usize) -> String {
+    let str_col = match col {
+        0 => "a",
+        1 => "b",
+        2 => "c",
+        3 => "d",
+        4 => "e",
+        5 => "f",
+        6 => "g",
+        7 => "h",
+        _ => "",
+    };
+    return format!("{}", str_col);
 }
