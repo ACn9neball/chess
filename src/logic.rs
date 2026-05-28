@@ -21,11 +21,11 @@ pub fn w_pawn(
                 board[row][col] = ".".to_string();
             } else if nrow == 0 {
             }
-        } else if board[nrow][ncol].starts_with("B") {
-            if nrow == (row + 1) && ncol == (col - 1) {
+        } else if board[nrow][ncol].starts_with("B") && board[nrow][ncol] != "BK".to_string() {
+            if nrow == (row - 1) && ncol == (col - 1) {
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
-            } else if nrow == (row + 1) && ncol == (col + 1) {
+            } else if nrow == (row - 1) && ncol == (col + 1) {
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -58,11 +58,11 @@ pub fn b_pawn(
                 board[row][col] = ".".to_string();
             } else if nrow == 7 {
             }
-        } else if board[nrow][ncol].starts_with("W") {
-            if nrow == (row - 1) && ncol == (col - 1) {
+        } else if board[nrow][ncol].starts_with("W") && board[nrow][ncol] != "WK".to_string() {
+            if nrow == (row + 1) && ncol == (col - 1) {
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
-            } else if nrow == (row - 1) && ncol == (col + 1) {
+            } else if nrow == (row + 1) && ncol == (col + 1) {
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -84,7 +84,14 @@ pub fn rook(
     let count_col = ncol.abs_diff(col);
     let mut found = false;
 
-    if board[nrow][ncol] == ".".to_string() {
+    if board[nrow][ncol] == ".".to_string()
+        || (value.as_str() == "WR"
+            && board[nrow][ncol].starts_with("B")
+            && board[nrow][ncol].as_str() != "BK")
+        || (value.as_str() == "BR"
+            && board[nrow][ncol].starts_with("W")
+            && board[nrow][ncol].as_str() != "WK")
+    {
         if col == ncol {
             let row_dir = if nrow > row { 1 as isize } else { -1 as isize };
             let mut current_row = row as isize;
@@ -131,7 +138,14 @@ pub fn bishop(
     let count_col = ncol.abs_diff(col);
     let mut found = false;
 
-    if board[nrow][ncol] == ".".to_string() {
+    if board[nrow][ncol] == ".".to_string()
+        || (value.as_str() == "WB"
+            && board[nrow][ncol].starts_with("B")
+            && board[nrow][ncol].as_str() != "BK")
+        || (value.as_str() == "BB"
+            && board[nrow][ncol].starts_with("W")
+            && board[nrow][ncol].as_str() != "WK")
+    {
         if count_row == count_col {
             let row_dir = if nrow > row { 1 as isize } else { -1 as isize };
             let col_dir = if ncol > col { 1 as isize } else { -1 as isize };
@@ -166,7 +180,14 @@ pub fn king(
     let value = board[row][col].clone();
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
-    if board[nrow][ncol] == ".".to_string() {
+    if board[nrow][ncol] == ".".to_string()
+        || (value.as_str() == "WK"
+            && board[nrow][ncol].starts_with("B")
+            && board[nrow][ncol].as_str() != "BK")
+        || (value.as_str() == "BK"
+            && board[nrow][ncol].starts_with("W")
+            && board[nrow][ncol].as_str() != "WK")
+    {
         if (count_row == 1 || count_row == 0) && (count_col == 1 || count_col == 0) {
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
@@ -188,7 +209,14 @@ pub fn queen(
     let count_col = ncol.abs_diff(col);
     let mut found = false;
 
-    if board[nrow][ncol] == ".".to_string() {
+    if board[nrow][ncol] == ".".to_string()
+        || (value.as_str() == "WQ"
+            && board[nrow][ncol].starts_with("B")
+            && board[nrow][ncol].as_str() != "BK")
+        || (value.as_str() == "BQ"
+            && board[nrow][ncol].starts_with("W")
+            && board[nrow][ncol].as_str() != "WK")
+    {
         if count_row == count_col {
             let row_dir = if nrow > row { 1 as isize } else { -1 as isize };
             let col_dir = if ncol > col { 1 as isize } else { -1 as isize };
@@ -252,7 +280,14 @@ pub fn knight(
     let value = board[row][col].clone();
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
-    if board[nrow][ncol] == ".".to_string() {
+    if board[nrow][ncol] == ".".to_string()
+        || (value.as_str() == "WN"
+            && board[nrow][ncol].starts_with("B")
+            && board[nrow][ncol].as_str() != "BK")
+        || (value.as_str() == "BN"
+            && board[nrow][ncol].starts_with("W")
+            && board[nrow][ncol].as_str() != "WK")
+    {
         if (count_row == 2) && (count_col == 1) {
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
