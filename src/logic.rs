@@ -98,6 +98,9 @@ pub fn rook(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let mutex = get_global_move();
+    let mut data = mutex.lock().unwrap();
+    let pos = position(nrow, ncol);
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     let mut found = false;
@@ -121,6 +124,11 @@ pub fn rook(
                 }
             }
             if !found {
+                if board[nrow][ncol] == ".".to_string() {
+                    *data = String::from(format!("r{}", pos));
+                } else {
+                    *data = String::from(format!("rx{}", pos));
+                }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -135,6 +143,11 @@ pub fn rook(
                 }
             }
             if !found {
+                if board[nrow][ncol] == ".".to_string() {
+                    *data = String::from(format!("r{}", pos));
+                } else {
+                    *data = String::from(format!("rx{}", pos));
+                }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -152,6 +165,9 @@ pub fn bishop(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let mutex = get_global_move();
+    let mut data = mutex.lock().unwrap();
+    let pos = position(nrow, ncol);
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     let mut found = false;
@@ -179,6 +195,11 @@ pub fn bishop(
             }
 
             if !found {
+                if board[nrow][ncol] == ".".to_string() {
+                    *data = String::from(format!("b{}", pos));
+                } else {
+                    *data = String::from(format!("bx{}", pos));
+                }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -196,6 +217,9 @@ pub fn king(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let mutex = get_global_move();
+    let mut data = mutex.lock().unwrap();
+    let pos = position(nrow, ncol);
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     if board[nrow][ncol] == ".".to_string()
@@ -207,6 +231,11 @@ pub fn king(
             && board[nrow][ncol].as_str() != "WK")
     {
         if (count_row == 1 || count_row == 0) && (count_col == 1 || count_col == 0) {
+            if board[nrow][ncol] == ".".to_string() {
+                *data = String::from(format!("k{}", pos));
+            } else {
+                *data = String::from(format!("kx{}", pos));
+            }
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
         }
@@ -223,6 +252,9 @@ pub fn queen(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let mutex = get_global_move();
+    let mut data = mutex.lock().unwrap();
+    let pos = position(nrow, ncol);
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     let mut found = false;
@@ -250,6 +282,11 @@ pub fn queen(
             }
 
             if !found {
+                if board[nrow][ncol] == ".".to_string() {
+                    *data = String::from(format!("q{}", pos));
+                } else {
+                    *data = String::from(format!("qx{}", pos));
+                }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -264,6 +301,11 @@ pub fn queen(
                 }
             }
             if !found {
+                if board[nrow][ncol] == ".".to_string() {
+                    *data = String::from(format!("q{}", pos));
+                } else {
+                    *data = String::from(format!("qx{}", pos));
+                }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -279,6 +321,11 @@ pub fn queen(
             }
 
             if !found {
+                if board[nrow][ncol] == ".".to_string() {
+                    *data = String::from(format!("q{}", pos));
+                } else {
+                    *data = String::from(format!("qx{}", pos));
+                }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
@@ -296,6 +343,9 @@ pub fn knight(
     ncol: usize,
 ) -> [[String; 8]; 8] {
     let value = board[row][col].clone();
+    let mutex = get_global_move();
+    let mut data = mutex.lock().unwrap();
+    let pos = position(nrow, ncol);
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     if board[nrow][ncol] == ".".to_string()
@@ -307,9 +357,19 @@ pub fn knight(
             && board[nrow][ncol].as_str() != "WK")
     {
         if (count_row == 2) && (count_col == 1) {
+            if board[nrow][ncol] == ".".to_string() {
+                *data = String::from(format!("n{}", pos));
+            } else {
+                *data = String::from(format!("nx{}", pos));
+            }
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
         } else if (count_col == 2) && (count_row == 1) {
+            if board[nrow][ncol] == ".".to_string() {
+                *data = String::from(format!("n{}", pos));
+            } else {
+                *data = String::from(format!("nx{}", pos));
+            }
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
         }
