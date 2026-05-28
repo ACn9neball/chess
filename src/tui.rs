@@ -1,4 +1,6 @@
-use crate::logic::{self, b_pawn, bishop, king, knight, queen, rook, w_pawn};
+use std::array;
+
+use crate::logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn};
 use color_eyre::eyre::Ok;
 use ratatui::{
     DefaultTerminal, Frame,
@@ -7,7 +9,6 @@ use ratatui::{
     style::{Color, Stylize},
     widgets::{Block, BorderType, Borders, Paragraph},
 };
-use std::array;
 
 struct Data {
     white_turn: bool,
@@ -94,12 +95,6 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                         }
                     }
                     KeyCode::Enter => {
-                        let mut m = String::new();
-                        if let Some(mutex) = logic::GLOBAL_MOVE.get() {
-                            let val = mutex.lock().unwrap();
-                            m = val.clone();
-                        }
-
                         if current_row == 8 && current_col == 8 {
                             current_row = row;
                             current_col = col;
@@ -109,7 +104,7 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                             if data.white_turn {
                                 match board[current_row][current_col].as_str() {
                                     "WP" => {
-                                        let nboard = w_pawn(
+                                        let (nboard, mv) = w_pawn(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -121,11 +116,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
-                                            white_moves.push(m);
+                                            white_moves.push(mv);
                                         }
                                     }
                                     "WR" => {
-                                        let nboard = rook(
+                                        let (nboard, mv) = rook(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -137,10 +132,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
+                                            white_moves.push(mv);
                                         }
                                     }
                                     "WB" => {
-                                        let nboard = bishop(
+                                        let (nboard, mv) = bishop(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -152,10 +148,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
+                                            white_moves.push(mv);
                                         }
                                     }
                                     "WK" => {
-                                        let nboard = king(
+                                        let (nboard, mv) = king(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -167,10 +164,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
+                                            white_moves.push(mv);
                                         }
                                     }
                                     "WQ" => {
-                                        let nboard = queen(
+                                        let (nboard, mv) = queen(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -182,10 +180,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
+                                            white_moves.push(mv);
                                         }
                                     }
                                     "WN" => {
-                                        let nboard = knight(
+                                        let (nboard, mv) = knight(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -197,6 +196,7 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = false;
+                                            white_moves.push(mv);
                                         }
                                     }
                                     _ => {}
@@ -204,7 +204,7 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                             } else {
                                 match board[current_row][current_col].as_str() {
                                     "BP" => {
-                                        let nboard = b_pawn(
+                                        let (nboard, mv) = b_pawn(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -216,12 +216,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
-                                            black_moves.push(m);
+                                            black_moves.push(mv);
                                         }
                                     }
 
                                     "BR" => {
-                                        let nboard = rook(
+                                        let (nboard, mv) = rook(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -233,10 +233,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
+                                            black_moves.push(mv);
                                         }
                                     }
                                     "BB" => {
-                                        let nboard = bishop(
+                                        let (nboard, mv) = bishop(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -248,11 +249,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
+                                            black_moves.push(mv);
                                         }
                                     }
 
                                     "BK" => {
-                                        let nboard = king(
+                                        let (nboard, mv) = king(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -264,11 +266,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
+                                            black_moves.push(mv);
                                         }
                                     }
 
                                     "BQ" => {
-                                        let nboard = queen(
+                                        let (nboard, mv) = queen(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -280,10 +283,11 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
+                                            black_moves.push(mv);
                                         }
                                     }
                                     "BN" => {
-                                        let nboard = knight(
+                                        let (nboard, mv) = knight(
                                             board.clone(),
                                             current_row,
                                             current_col,
@@ -295,6 +299,7 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             display = set_display(nboard.clone());
                                             board = nboard;
                                             data.white_turn = true;
+                                            black_moves.push(mv);
                                         }
                                     }
 
@@ -423,11 +428,13 @@ fn render(
         let mut blacks = String::new();
         let mut whites = String::new();
         for i in 0..white_moves.len() {
-            numbers += format!("{}.\n", (i + 1)).as_str();
-            whites += format!("{}.\n", white_moves[i]).as_str();
-        }
-        for i in 0..black_moves.len() {
-            blacks += format!("{}.\n", black_moves[i]).as_str();
+            numbers.push_str(&format!("{}.\n", i + 1));
+            whites.push_str(&format!("{}\n", white_moves[i]));
+            if i < black_moves.len() {
+                blacks.push_str(&format!("{}\n", black_moves[i]));
+            } else {
+                blacks.push_str(&format!("\n"));
+            }
         }
         frame.render_widget(Paragraph::new(numbers), num);
         frame.render_widget(Paragraph::new(whites), white);

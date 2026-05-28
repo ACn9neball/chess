@@ -1,22 +1,13 @@
-use std::sync::{Mutex, OnceLock};
-
-pub static GLOBAL_MOVE: OnceLock<Mutex<String>> = OnceLock::new();
-
-fn get_global_move() -> &'static Mutex<String> {
-    GLOBAL_MOVE.get_or_init(|| Mutex::new(String::from("")))
-}
-
 pub fn w_pawn(
     mut board: [[String; 8]; 8],
     row: usize,
     col: usize,
     nrow: usize,
     ncol: usize,
-) -> [[String; 8]; 8] {
+) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
-    let mutex = get_global_move();
-    let mut data = mutex.lock().unwrap();
     let pos = position(nrow, ncol);
+    let mut piece_move = String::new();
     if nrow > 0 {
         if board[nrow][ncol] == ".".to_string() {
             if row == 6 && (nrow == 5 || nrow == 4) && col == ncol {
@@ -31,7 +22,7 @@ pub fn w_pawn(
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
-            *data = String::from(pos);
+            piece_move = String::from(pos);
         } else if board[nrow][ncol].starts_with("B") && board[nrow][ncol] != "BK".to_string() {
             if nrow == (row - 1) && ncol == (col - 1) {
                 board[nrow][ncol] = value;
@@ -41,11 +32,11 @@ pub fn w_pawn(
                 board[row][col] = ".".to_string();
             }
             let capture = format!("{}x{}", capture_pos(col), pos);
-            *data = String::from(capture);
+            piece_move = String::from(capture);
         }
     }
 
-    return board;
+    return (board, piece_move);
 }
 
 pub fn b_pawn(
@@ -54,11 +45,10 @@ pub fn b_pawn(
     col: usize,
     nrow: usize,
     ncol: usize,
-) -> [[String; 8]; 8] {
+) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
-    let mutex = get_global_move();
-    let mut data = mutex.lock().unwrap();
     let pos = position(nrow, ncol);
+    let mut piece_move = String::new();
     if nrow < 7 {
         if board[nrow][ncol] == ".".to_string() {
             if row == 1 && (nrow == 2 || nrow == 3) && col == ncol {
@@ -73,7 +63,7 @@ pub fn b_pawn(
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             }
-            *data = String::from(pos);
+            piece_move = String::from(pos);
         } else if board[nrow][ncol].starts_with("W") && board[nrow][ncol] != "WK".to_string() {
             if nrow == (row + 1) && ncol == (col - 1) {
                 board[nrow][ncol] = value;
@@ -83,11 +73,11 @@ pub fn b_pawn(
                 board[row][col] = ".".to_string();
             }
             let capture = format!("{}x{}", capture_pos(col), pos);
-            *data = String::from(capture);
+            piece_move = String::from(capture);
         }
     }
 
-    return board;
+    return (board, piece_move);
 }
 
 pub fn rook(
@@ -96,11 +86,10 @@ pub fn rook(
     col: usize,
     nrow: usize,
     ncol: usize,
-) -> [[String; 8]; 8] {
+) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
-    let mutex = get_global_move();
-    let mut data = mutex.lock().unwrap();
     let pos = position(nrow, ncol);
+    let mut piece_move = String::new();
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     let mut found = false;
@@ -125,9 +114,9 @@ pub fn rook(
             }
             if !found {
                 if board[nrow][ncol] == ".".to_string() {
-                    *data = String::from(format!("r{}", pos));
+                    piece_move = String::from(format!("R{}", pos));
                 } else {
-                    *data = String::from(format!("rx{}", pos));
+                    piece_move = String::from(format!("Rx{}", pos));
                 }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
@@ -144,9 +133,9 @@ pub fn rook(
             }
             if !found {
                 if board[nrow][ncol] == ".".to_string() {
-                    *data = String::from(format!("r{}", pos));
+                    piece_move = String::from(format!("R{}", pos));
                 } else {
-                    *data = String::from(format!("rx{}", pos));
+                    piece_move = String::from(format!("Rx{}", pos));
                 }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
@@ -154,7 +143,7 @@ pub fn rook(
         }
     }
 
-    return board;
+    return (board, piece_move);
 }
 
 pub fn bishop(
@@ -163,11 +152,10 @@ pub fn bishop(
     col: usize,
     nrow: usize,
     ncol: usize,
-) -> [[String; 8]; 8] {
+) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
-    let mutex = get_global_move();
-    let mut data = mutex.lock().unwrap();
     let pos = position(nrow, ncol);
+    let mut piece_move = String::new();
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     let mut found = false;
@@ -196,9 +184,9 @@ pub fn bishop(
 
             if !found {
                 if board[nrow][ncol] == ".".to_string() {
-                    *data = String::from(format!("b{}", pos));
+                    piece_move = String::from(format!("B{}", pos));
                 } else {
-                    *data = String::from(format!("bx{}", pos));
+                    piece_move = String::from(format!("Bx{}", pos));
                 }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
@@ -206,7 +194,7 @@ pub fn bishop(
         }
     }
 
-    return board;
+    return (board, piece_move);
 }
 
 pub fn king(
@@ -215,11 +203,10 @@ pub fn king(
     col: usize,
     nrow: usize,
     ncol: usize,
-) -> [[String; 8]; 8] {
+) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
-    let mutex = get_global_move();
-    let mut data = mutex.lock().unwrap();
     let pos = position(nrow, ncol);
+    let mut piece_move = String::new();
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     if board[nrow][ncol] == ".".to_string()
@@ -232,16 +219,16 @@ pub fn king(
     {
         if (count_row == 1 || count_row == 0) && (count_col == 1 || count_col == 0) {
             if board[nrow][ncol] == ".".to_string() {
-                *data = String::from(format!("k{}", pos));
+                piece_move = String::from(format!("K{}", pos));
             } else {
-                *data = String::from(format!("kx{}", pos));
+                piece_move = String::from(format!("Kx{}", pos));
             }
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
         }
     }
 
-    return board;
+    return (board, piece_move);
 }
 
 pub fn queen(
@@ -250,11 +237,10 @@ pub fn queen(
     col: usize,
     nrow: usize,
     ncol: usize,
-) -> [[String; 8]; 8] {
+) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
-    let mutex = get_global_move();
-    let mut data = mutex.lock().unwrap();
     let pos = position(nrow, ncol);
+    let mut piece_move = String::new();
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     let mut found = false;
@@ -283,9 +269,9 @@ pub fn queen(
 
             if !found {
                 if board[nrow][ncol] == ".".to_string() {
-                    *data = String::from(format!("q{}", pos));
+                    piece_move = String::from(format!("Q{}", pos));
                 } else {
-                    *data = String::from(format!("qx{}", pos));
+                    piece_move = String::from(format!("Qx{}", pos));
                 }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
@@ -302,9 +288,9 @@ pub fn queen(
             }
             if !found {
                 if board[nrow][ncol] == ".".to_string() {
-                    *data = String::from(format!("q{}", pos));
+                    piece_move = String::from(format!("Q{}", pos));
                 } else {
-                    *data = String::from(format!("qx{}", pos));
+                    piece_move = String::from(format!("Qx{}", pos));
                 }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
@@ -322,9 +308,9 @@ pub fn queen(
 
             if !found {
                 if board[nrow][ncol] == ".".to_string() {
-                    *data = String::from(format!("q{}", pos));
+                    piece_move = String::from(format!("Q{}", pos));
                 } else {
-                    *data = String::from(format!("qx{}", pos));
+                    piece_move = String::from(format!("Qx{}", pos));
                 }
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
@@ -332,7 +318,7 @@ pub fn queen(
         }
     }
 
-    return board;
+    return (board, piece_move);
 }
 
 pub fn knight(
@@ -341,11 +327,10 @@ pub fn knight(
     col: usize,
     nrow: usize,
     ncol: usize,
-) -> [[String; 8]; 8] {
+) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
-    let mutex = get_global_move();
-    let mut data = mutex.lock().unwrap();
     let pos = position(nrow, ncol);
+    let mut piece_move = String::new();
     let count_row = nrow.abs_diff(row);
     let count_col = ncol.abs_diff(col);
     if board[nrow][ncol] == ".".to_string()
@@ -358,24 +343,24 @@ pub fn knight(
     {
         if (count_row == 2) && (count_col == 1) {
             if board[nrow][ncol] == ".".to_string() {
-                *data = String::from(format!("n{}", pos));
+                piece_move = String::from(format!("N{}", pos));
             } else {
-                *data = String::from(format!("nx{}", pos));
+                piece_move = String::from(format!("Nx{}", pos));
             }
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
         } else if (count_col == 2) && (count_row == 1) {
             if board[nrow][ncol] == ".".to_string() {
-                *data = String::from(format!("n{}", pos));
+                piece_move = String::from(format!("n{}", pos));
             } else {
-                *data = String::from(format!("nx{}", pos));
+                piece_move = String::from(format!("nx{}", pos));
             }
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
         }
     }
 
-    return board;
+    return (board, piece_move);
 }
 
 fn position(nrow: usize, ncol: usize) -> String {
