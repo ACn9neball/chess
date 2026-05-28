@@ -34,7 +34,7 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
         black_score: 0,
     };
     let mut board = set_board();
-    let mut display = set_display();
+    let mut display = set_display(board.clone());
     let mut color_display = set_color(board.clone());
     let mut highlight: [[bool; 8]; 8] = array::from_fn(|_| array::from_fn(|_| false));
     let mut row = 7;
@@ -106,13 +106,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = w_pawn(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = false;
@@ -126,13 +121,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = rook(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = false;
@@ -146,13 +136,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = bishop(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = false;
@@ -166,13 +151,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = king(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = false;
@@ -186,13 +166,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = queen(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = false;
@@ -206,13 +181,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = knight(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = false;
@@ -230,13 +200,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = b_pawn(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = true;
@@ -251,13 +216,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = rook(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = true;
@@ -271,13 +231,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = bishop(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = true;
@@ -292,13 +247,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = king(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = true;
@@ -313,13 +263,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = queen(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = true;
@@ -333,13 +278,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                         );
-                                        display = knight(
-                                            display,
-                                            current_row,
-                                            current_col,
-                                            next_row,
-                                            next_col,
-                                        );
+
+                                        display = set_display(nboard.clone());
                                         if board != nboard {
                                             board = nboard;
                                             data.white_turn = true;
@@ -487,29 +427,43 @@ fn set_board() -> [[String; 8]; 8] {
     return board;
 }
 
-fn set_display() -> [[String; 8]; 8] {
+fn set_display(board: [[String; 8]; 8]) -> [[String; 8]; 8] {
     let mut display_board: [[String; 8]; 8] =
         array::from_fn(|_| array::from_fn(|_| String::from(".")));
-    display_board[7][0] = "|_|_|\n ( )\n[___]".to_string();
-    display_board[7][1] = "|\\\n ( \\\n[___]".to_string();
-    display_board[7][2] = " o\n ( )\n[___]".to_string();
-    display_board[7][3] = " www\n ( )\n[___]".to_string();
-    display_board[7][4] = " -+-\n ( )\n[___]".to_string();
-    display_board[7][5] = " o\n ( )\n[___]".to_string();
-    display_board[7][6] = "|\\\n ( \\\n[___]".to_string();
-    display_board[7][7] = "|_|_|\n ( )\n[___]".to_string();
+
+    let wr = "|_|_|\n ( )\n[___]".to_string();
+    let wn = "|\\\n ( \\\n[___]".to_string();
+    let wb = " o\n ( )\n[___]".to_string();
+    let wq = " www\n ( )\n[___]".to_string();
+    let wk = " -+-\n ( )\n[___]".to_string();
+    let bp = "[___]\n ( )".to_string();
+    let wp = "\n ( )\n[___]".to_string();
+    let br = "[___]\n ( )\n|-|-|".to_string();
+    let bn = "[___]\n( /\n|/".to_string();
+    let bb = "[___]\n ( )\n o".to_string();
+    let bq = "[___]\n ( )\nmmm".to_string();
+    let bk = "[___]\n ( )\n-+-".to_string();
+
     for row in 0..8 {
-        display_board[1][row] = "[___]\n ( )".to_string();
-        display_board[6][row] = "\n ( )\n[___]".to_string();
+        for col in 0..8 {
+            match board[row][col].as_str() {
+                "WR" => display_board[row][col] = wr.clone(),
+                "WN" => display_board[row][col] = wn.clone(),
+                "WB" => display_board[row][col] = wb.clone(),
+                "WQ" => display_board[row][col] = wq.clone(),
+                "WK" => display_board[row][col] = wk.clone(),
+                "WP" => display_board[row][col] = wp.clone(),
+                "BR" => display_board[row][col] = br.clone(),
+                "BN" => display_board[row][col] = bn.clone(),
+                "BB" => display_board[row][col] = bb.clone(),
+                "BQ" => display_board[row][col] = bq.clone(),
+                "BK" => display_board[row][col] = bk.clone(),
+                "BP" => display_board[row][col] = bp.clone(),
+                _ => {}
+            }
+        }
     }
-    display_board[0][0] = "[___]\n ( )\n|-|-|".to_string();
-    display_board[0][1] = "[___]\n( /\n|/".to_string();
-    display_board[0][2] = "[___]\n ( )\n o".to_string();
-    display_board[0][3] = "[___]\n ( )\nmmm".to_string();
-    display_board[0][4] = "[___]\n ( )\n-+-".to_string();
-    display_board[0][5] = "[___]\n ( )\n o".to_string();
-    display_board[0][6] = "[___]\n( /\n|/".to_string();
-    display_board[0][7] = "[___]\n ( )\n|-|-|".to_string();
+
     return display_board;
 }
 

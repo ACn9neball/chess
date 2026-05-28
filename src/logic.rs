@@ -21,6 +21,14 @@ pub fn w_pawn(
                 board[row][col] = ".".to_string();
             } else if nrow == 0 {
             }
+        } else if board[nrow][ncol].starts_with("B") {
+            if nrow == (row + 1) && ncol == (col - 1) {
+                board[nrow][ncol] = value;
+                board[row][col] = ".".to_string();
+            } else if nrow == (row + 1) && ncol == (col + 1) {
+                board[nrow][ncol] = value;
+                board[row][col] = ".".to_string();
+            }
         }
     }
 
@@ -49,6 +57,14 @@ pub fn b_pawn(
                 board[nrow][ncol] = value;
                 board[row][col] = ".".to_string();
             } else if nrow == 7 {
+            }
+        } else if board[nrow][ncol].starts_with("W") {
+            if nrow == (row - 1) && ncol == (col - 1) {
+                board[nrow][ncol] = value;
+                board[row][col] = ".".to_string();
+            } else if nrow == (row - 1) && ncol == (col + 1) {
+                board[nrow][ncol] = value;
+                board[row][col] = ".".to_string();
             }
         }
     }
