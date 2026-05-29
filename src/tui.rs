@@ -1,5 +1,3 @@
-use std::array;
-
 use crate::logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn};
 use color_eyre::eyre::Ok;
 use ratatui::{
@@ -9,11 +7,10 @@ use ratatui::{
     style::{Color, Stylize},
     widgets::{Block, BorderType, Borders, Paragraph},
 };
+use std::array;
 
 struct Data {
     white_turn: bool,
-    white_score: i32,
-    black_score: i32,
 }
 
 pub fn start() -> color_eyre::Result<()> {
@@ -29,11 +26,7 @@ pub fn start() -> color_eyre::Result<()> {
 }
 
 fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
-    let mut data = Data {
-        white_turn: true,
-        white_score: 0,
-        black_score: 0,
-    };
+    let mut data = Data { white_turn: true };
     let mut board = set_board();
     let mut display = set_display(board.clone());
     let mut color_display = set_color(board.clone());
@@ -335,11 +328,12 @@ fn render(
     let split = Layout::horizontal([Constraint::Ratio(8, 16), Constraint::Ratio(8, 16)]);
     let [left, right] = split.areas(screen);
     let right_split = Layout::horizontal([
+        Constraint::Percentage(5),
         Constraint::Percentage(10),
         Constraint::Fill(1),
         Constraint::Fill(1),
     ]);
-    let [num, white, black] = right_split.areas(right);
+    let [col, num, white, black] = right_split.areas(right);
     let split = Layout::vertical([Constraint::Ratio(8, 9), Constraint::Ratio(1, 9)]);
     let [board, bottom] = split.areas(left);
 
@@ -433,12 +427,50 @@ fn render(
             if i < black_moves.len() {
                 blacks.push_str(&format!("{}\n", black_moves[i]));
             } else {
-                blacks.push_str(&format!("\n"));
+                blacks.push_str("\n");
             }
         }
         frame.render_widget(Paragraph::new(numbers), num);
         frame.render_widget(Paragraph::new(whites), white);
         frame.render_widget(Paragraph::new(blacks), black);
+        let mut constraints = vec![];
+        for _ in 0..8 {
+            constraints.push(Constraint::Fill(1));
+        }
+
+        let bottom_split = Layout::horizontal(constraints);
+        let [a, b, c, d, e, f, g, h] = bottom_split.areas(bottom);
+        let bottom_squares = [a, b, c, d, e, f, g, h];
+        for i in 0..8 {
+            let unicode = (97 + i as u8) as char;
+            frame.render_widget(
+                Paragraph::new(unicode.to_string()).centered(),
+                bottom_squares[i],
+            );
+        }
+        let mut constraints = vec![];
+        for _ in 0..8 {
+            constraints.push(Constraint::Fill(1));
+        }
+        constraints.push(Constraint::Ratio(1, 9));
+
+        let col_split = Layout::vertical(constraints);
+        let [one, two, three, four, five, six, seven, eight, _empty] = col_split.areas(col);
+        let col_squares = [one, two, three, four, five, six, seven, eight];
+        for i in 0..8 {
+            let value = 8 - i;
+            let target_square = col_squares[i];
+
+            let vertical_chunks = Layout::vertical([
+                Constraint::Fill(1),
+                Constraint::Length(1),
+                Constraint::Fill(1),
+            ])
+            .split(target_square);
+
+            let paragraph = Paragraph::new(value.to_string());
+            frame.render_widget(paragraph, vertical_chunks[1]);
+        }
     }
 }
 
@@ -523,3 +555,10 @@ fn set_color(board: [[String; 8]; 8]) -> [[Color; 8]; 8] {
 
     return color_board;
 }
+
+fn check(board: [[String; 8]; 8], white: bool) -> bool {
+    let mut bcheck = false;
+    return bcheck;
+}
+
+fn checkmate() {}

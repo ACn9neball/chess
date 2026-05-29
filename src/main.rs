@@ -1,4 +1,5 @@
 mod logic;
+mod possible;
 mod tui;
 
 use clap::{Parser, ValueEnum};
