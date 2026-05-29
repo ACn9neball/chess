@@ -1,8 +1,14 @@
-use crate::logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn};
+use crate::{
+    logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn},
+    possible::{bishop_cover, black_pawn_cover, king_cover, knight_cover, queen_cover, rook_cover},
+};
 use color_eyre::eyre::Ok;
 use ratatui::{
     DefaultTerminal, Frame,
-    crossterm::event::{self, Event, KeyCode},
+    crossterm::{
+        cursor::position,
+        event::{self, Event, KeyCode},
+    },
     layout::{Alignment, Constraint, Layout},
     style::{Color, Stylize},
     widgets::{Block, BorderType, Borders, Paragraph},
@@ -558,6 +564,120 @@ fn set_color(board: [[String; 8]; 8]) -> [[Color; 8]; 8] {
 
 fn check(board: [[String; 8]; 8], white: bool) -> bool {
     let mut bcheck = false;
+    let mut row = 0;
+    let mut col = 0;
+    if white {
+        for i in 0..8 {
+            for j in 0..8 {
+                if board[i][j] == "WK".to_string() {
+                    row = i;
+                    col = j;
+                }
+            }
+        }
+
+        for i in 0..8 {
+            for j in 0..8 {
+                if board[i][j].starts_with("B") {
+                    match board[i][j].as_str() {
+                        "BP" => {
+                            let possility = black_pawn_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "WR" => {
+                            let possility = rook_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "WB" => {
+                            let possility = bishop_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "WQ" => {
+                            let possility = queen_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "WN" => {
+                            let possility = knight_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "WK" => {
+                            let possility = king_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+    } else {
+        for i in 0..8 {
+            for j in 0..8 {
+                if board[i][j] == "BK".to_string() {
+                    row = i;
+                    col = j;
+                }
+            }
+        }
+
+        for i in 0..8 {
+            for j in 0..8 {
+                if board[i][j].starts_with("W") {
+                    match board[i][j].as_str() {
+                        "WP" => {
+                            let possility = black_pawn_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "BR" => {
+                            let possility = rook_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "BB" => {
+                            let possility = bishop_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "BQ" => {
+                            let possility = queen_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "BN" => {
+                            let possility = knight_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        "BK" => {
+                            let possility = king_cover(board.clone(), i, j);
+                            if possility[row][col] == "C" {
+                                bcheck = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+    }
+
     return bcheck;
 }
 
