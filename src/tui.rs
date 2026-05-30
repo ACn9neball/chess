@@ -112,10 +112,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = false;
-                                            white_moves.push(mv);
+                                            if !check(nboard.clone(), true) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = false;
+                                                white_moves.push(mv);
+                                            }
                                         }
                                     }
                                     "WR" => {
@@ -128,10 +130,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = false;
-                                            white_moves.push(mv);
+                                            if !check(nboard.clone(), true) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = false;
+                                                white_moves.push(mv);
+                                            }
                                         }
                                     }
                                     "WB" => {
@@ -144,10 +148,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = false;
-                                            white_moves.push(mv);
+                                            if !check(nboard.clone(), true) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = false;
+                                                white_moves.push(mv);
+                                            }
                                         }
                                     }
                                     "WK" => {
@@ -178,10 +184,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = false;
-                                            white_moves.push(mv);
+                                            if !check(nboard.clone(), true) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = false;
+                                                white_moves.push(mv);
+                                            }
                                         }
                                     }
                                     "WN" => {
@@ -194,10 +202,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = false;
-                                            white_moves.push(mv);
+                                            if !check(nboard.clone(), true) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = false;
+                                                white_moves.push(mv);
+                                            }
                                         }
                                     }
                                     _ => {}
@@ -214,10 +224,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = true;
-                                            black_moves.push(mv);
+                                            if !check(nboard.clone(), false) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = true;
+                                                black_moves.push(mv);
+                                            }
                                         }
                                     }
 
@@ -231,10 +243,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = true;
-                                            black_moves.push(mv);
+                                            if !check(nboard.clone(), false) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = true;
+                                                black_moves.push(mv);
+                                            }
                                         }
                                     }
                                     "BB" => {
@@ -247,10 +261,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = true;
-                                            black_moves.push(mv);
+                                            if !check(nboard.clone(), false) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = true;
+                                                black_moves.push(mv);
+                                            }
                                         }
                                     }
 
@@ -283,10 +299,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = true;
-                                            black_moves.push(mv);
+                                            if !check(nboard.clone(), false) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = true;
+                                                black_moves.push(mv);
+                                            }
                                         }
                                     }
                                     "BN" => {
@@ -299,10 +317,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = true;
-                                            black_moves.push(mv);
+                                            if !check(nboard.clone(), false) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = true;
+                                                black_moves.push(mv);
+                                            }
                                         }
                                     }
 
