@@ -1,60 +1,35 @@
 use std::array;
 
-pub fn black_pawn_cover(board: [[String; 8]; 8], row: usize, col: usize) -> [[String; 8]; 8] {
+pub fn black_pawn_cover(row: usize, col: usize) -> [[String; 8]; 8] {
     let mut possible: [[String; 8]; 8] = array::from_fn(|_| array::from_fn(|_| String::from(".")));
-    for nrow in 0..8 {
-        for ncol in 0..8 {
-            if nrow < 7 {
-                if board[nrow][ncol] == ".".to_string() {
-                    if row == 1 && (nrow == 2 || nrow == 3) && col == ncol {
-                        if nrow == 3 && board[2][ncol] == ".".to_string() {
-                            possible[nrow][ncol] = "M".to_string();
-                        } else if nrow == 2 {
-                            possible[nrow][ncol] = "M".to_string();
-                        }
-                    } else if nrow == (row + 1) && col == ncol {
-                        possible[nrow][ncol] = "M".to_string();
-                    }
-                } else if board[nrow][ncol].starts_with("W")
-                    && board[nrow][ncol] != "WK".to_string()
-                {
-                    if nrow == (row + 1) && ncol == (col - 1) {
-                        possible[nrow][ncol] = "C".to_string();
-                    } else if nrow == (row + 1) && ncol == (col + 1) {
-                        possible[nrow][ncol] = "C".to_string();
-                    }
-                }
-            }
+    if row < 7 {
+        possible[row + 1][col] = "M".to_string();
+        if row == 1 {
+            possible[row + 2][col] = "M".to_string();
+        }
+        if col < 7 {
+            possible[row + 1][col + 1] = "PC".to_string();
+        }
+        if col > 0 {
+            possible[row + 1][col - 1] = "PC".to_string();
         }
     }
+
     return possible;
 }
 
-pub fn white_pawn_cover(board: [[String; 8]; 8], row: usize, col: usize) -> [[String; 8]; 8] {
+pub fn white_pawn_cover(row: usize, col: usize) -> [[String; 8]; 8] {
     let mut possible: [[String; 8]; 8] = array::from_fn(|_| array::from_fn(|_| String::from(".")));
-    for nrow in 0..8 {
-        for ncol in 0..8 {
-            if nrow > 0 {
-                if board[nrow][ncol] == ".".to_string() {
-                    if row == 6 && (nrow == 5 || nrow == 4) && col == ncol {
-                        if nrow == 4 && board[5][ncol] == ".".to_string() {
-                            possible[nrow][ncol] = "M".to_string();
-                        } else if nrow == 5 {
-                            possible[nrow][ncol] = "M".to_string();
-                        }
-                    } else if nrow == (row - 1) && col == ncol {
-                        possible[nrow][ncol] = "M".to_string();
-                    }
-                } else if board[nrow][ncol].starts_with("B")
-                    && board[nrow][ncol] != "BK".to_string()
-                {
-                    if nrow == (row - 1) && ncol == (col - 1) {
-                        possible[nrow][ncol] = "C".to_string();
-                    } else if nrow == (row - 1) && ncol == (col + 1) {
-                        possible[nrow][ncol] = "C".to_string();
-                    }
-                }
-            }
+    if row > 0 {
+        possible[row - 1][col] = "M".to_string();
+        if row == 6 {
+            possible[row - 2][col] = "M".to_string();
+        }
+        if col < 7 {
+            possible[row - 1][col + 1] = "PC".to_string();
+        }
+        if col > 0 {
+            possible[row - 1][col - 1] = "PC".to_string();
         }
     }
 

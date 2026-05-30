@@ -1,14 +1,14 @@
 use crate::{
     logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn},
-    possible::{bishop_cover, black_pawn_cover, king_cover, knight_cover, queen_cover, rook_cover},
+    possible::{
+        bishop_cover, black_pawn_cover, king_cover, knight_cover, queen_cover, rook_cover,
+        white_pawn_cover,
+    },
 };
 use color_eyre::eyre::Ok;
 use ratatui::{
     DefaultTerminal, Frame,
-    crossterm::{
-        cursor::position,
-        event::{self, Event, KeyCode},
-    },
+    crossterm::event::{self, Event, KeyCode},
     layout::{Alignment, Constraint, Layout},
     style::{Color, Stylize},
     widgets::{Block, BorderType, Borders, Paragraph},
@@ -160,10 +160,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = false;
-                                            white_moves.push(mv);
+                                            if !check(nboard.clone(), true) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = false;
+                                                white_moves.push(mv);
+                                            }
                                         }
                                     }
                                     "WQ" => {
@@ -262,10 +264,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                         );
 
                                         if board != nboard {
-                                            display = set_display(nboard.clone());
-                                            board = nboard;
-                                            data.white_turn = true;
-                                            black_moves.push(mv);
+                                            if !check(nboard.clone(), false) {
+                                                display = set_display(nboard.clone());
+                                                board = nboard;
+                                                data.white_turn = true;
+                                                black_moves.push(mv);
+                                            }
                                         }
                                     }
 
@@ -575,49 +579,46 @@ fn check(board: [[String; 8]; 8], white: bool) -> bool {
                 }
             }
         }
-
         for i in 0..8 {
             for j in 0..8 {
-                if board[i][j].starts_with("B") {
-                    match board[i][j].as_str() {
-                        "BP" => {
-                            let possility = black_pawn_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
+                match board[i][j].as_str() {
+                    "BP" => {
+                        let possility = black_pawn_cover(i, j);
+                        if possility[row][col] == "PC" {
+                            bcheck = true;
                         }
-                        "WR" => {
-                            let possility = rook_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "WB" => {
-                            let possility = bishop_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "WQ" => {
-                            let possility = queen_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "WN" => {
-                            let possility = knight_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "WK" => {
-                            let possility = king_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        _ => {}
                     }
+                    "BR" => {
+                        let possility = rook_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "BB" => {
+                        let possility = bishop_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "BQ" => {
+                        let possility = queen_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "BN" => {
+                        let possility = knight_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "BK" => {
+                        let possility = king_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    _ => {}
                 }
             }
         }
@@ -630,49 +631,46 @@ fn check(board: [[String; 8]; 8], white: bool) -> bool {
                 }
             }
         }
-
         for i in 0..8 {
             for j in 0..8 {
-                if board[i][j].starts_with("W") {
-                    match board[i][j].as_str() {
-                        "WP" => {
-                            let possility = black_pawn_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
+                match board[i][j].as_str() {
+                    "WP" => {
+                        let possility = white_pawn_cover(i, j);
+                        if possility[row][col] == "PC" {
+                            bcheck = true;
                         }
-                        "BR" => {
-                            let possility = rook_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "BB" => {
-                            let possility = bishop_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "BQ" => {
-                            let possility = queen_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "BN" => {
-                            let possility = knight_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        "BK" => {
-                            let possility = king_cover(board.clone(), i, j);
-                            if possility[row][col] == "C" {
-                                bcheck = true;
-                            }
-                        }
-                        _ => {}
                     }
+                    "WR" => {
+                        let possility = rook_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "WB" => {
+                        let possility = bishop_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "WQ" => {
+                        let possility = queen_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "WN" => {
+                        let possility = knight_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    "WK" => {
+                        let possility = king_cover(board.clone(), i, j);
+                        if possility[row][col] == "M" || possility[row][col] == "C" {
+                            bcheck = true;
+                        }
+                    }
+                    _ => {}
                 }
             }
         }
