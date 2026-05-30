@@ -1,4 +1,5 @@
 use crate::{
+    checkmate::checkmate,
     logic::{b_pawn, bishop, king, knight, queen, rook, w_pawn},
     possible::{
         bishop_cover, black_pawn_cover, king_cover, knight_cover, queen_cover, rook_cover,
@@ -212,6 +213,10 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                     }
                                     _ => {}
                                 }
+                                let check_mate = checkmate(board.clone(), true);
+                                if check_mate {
+                                    println!("Black wins");
+                                }
                             } else {
                                 match board[current_row][current_col].as_str() {
                                     "BP" => {
@@ -327,6 +332,10 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                     }
 
                                     _ => {}
+                                }
+                                let check_mate = checkmate(board.clone(), false);
+                                if check_mate {
+                                    println!("White wins");
                                 }
                             }
 
@@ -603,8 +612,8 @@ fn check(board: [[String; 8]; 8], white: bool) -> bool {
             for j in 0..8 {
                 match board[i][j].as_str() {
                     "BP" => {
-                        let possility = black_pawn_cover(i, j);
-                        if possility[row][col] == "PC" {
+                        let possility = black_pawn_cover(board.clone(), i, j);
+                        if possility[row][col] == "PC" || possility[row][col] == "C" {
                             bcheck = true;
                         }
                     }
@@ -655,8 +664,8 @@ fn check(board: [[String; 8]; 8], white: bool) -> bool {
             for j in 0..8 {
                 match board[i][j].as_str() {
                     "WP" => {
-                        let possility = white_pawn_cover(i, j);
-                        if possility[row][col] == "PC" {
+                        let possility = white_pawn_cover(board.clone(), i, j);
+                        if possility[row][col] == "PC" || possility[row][col] == "C" {
                             bcheck = true;
                         }
                     }
@@ -698,5 +707,3 @@ fn check(board: [[String; 8]; 8], white: bool) -> bool {
 
     return bcheck;
 }
-
-fn checkmate() {}

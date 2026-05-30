@@ -1,3 +1,4 @@
+mod checkmate;
 mod logic;
 mod possible;
 mod tui;

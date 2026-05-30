@@ -1,35 +1,63 @@
 use std::array;
 
-pub fn black_pawn_cover(row: usize, col: usize) -> [[String; 8]; 8] {
+pub fn black_pawn_cover(board: [[String; 8]; 8], row: usize, col: usize) -> [[String; 8]; 8] {
     let mut possible: [[String; 8]; 8] = array::from_fn(|_| array::from_fn(|_| String::from(".")));
     if row < 7 {
-        possible[row + 1][col] = "M".to_string();
-        if row == 1 {
-            possible[row + 2][col] = "M".to_string();
+        if board[row + 1][col] == ".".to_string() {
+            possible[row + 1][col] = "M".to_string();
         }
+
+        if board[row + 2][col] == ".".to_string() {
+            if row == 1 {
+                possible[row + 2][col] = "M".to_string();
+            }
+        }
+
         if col < 7 {
-            possible[row + 1][col + 1] = "PC".to_string();
+            if board[row + 1][col + 1] != "." {
+                possible[row + 1][col + 1] = "C".to_string();
+            } else {
+                possible[row + 1][col + 1] = "PC".to_string();
+            }
         }
         if col > 0 {
-            possible[row + 1][col - 1] = "PC".to_string();
+            if board[row + 1][col - 1] != "." {
+                possible[row + 1][col - 1] = "C".to_string();
+            } else {
+                possible[row + 1][col - 1] = "PC".to_string();
+            }
         }
     }
 
     return possible;
 }
 
-pub fn white_pawn_cover(row: usize, col: usize) -> [[String; 8]; 8] {
+pub fn white_pawn_cover(board: [[String; 8]; 8], row: usize, col: usize) -> [[String; 8]; 8] {
     let mut possible: [[String; 8]; 8] = array::from_fn(|_| array::from_fn(|_| String::from(".")));
     if row > 0 {
-        possible[row - 1][col] = "M".to_string();
-        if row == 6 {
-            possible[row - 2][col] = "M".to_string();
+        if board[row - 1][col] == ".".to_string() {
+            possible[row - 1][col] = "M".to_string();
         }
+
+        if board[row - 2][col] == ".".to_string() {
+            if row == 6 {
+                possible[row - 2][col] = "M".to_string();
+            }
+        }
+
         if col < 7 {
-            possible[row - 1][col + 1] = "PC".to_string();
+            if board[row - 1][col + 1] == ".".to_string() {
+                possible[row - 1][col + 1] = "C".to_string();
+            } else {
+                possible[row - 1][col + 1] = "PC".to_string();
+            }
         }
         if col > 0 {
-            possible[row - 1][col - 1] = "PC".to_string();
+            if board[row - 1][col - 1] == ".".to_string() {
+                possible[row - 1][col - 1] = "C".to_string();
+            } else {
+                possible[row - 1][col - 1] = "PC".to_string();
+            }
         }
     }
 
