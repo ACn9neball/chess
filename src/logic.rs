@@ -203,6 +203,7 @@ pub fn king(
     col: usize,
     nrow: usize,
     ncol: usize,
+    king_moved: bool,
 ) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
     let pos = position(nrow, ncol);
@@ -225,6 +226,54 @@ pub fn king(
             }
             board[nrow][ncol] = value;
             board[row][col] = ".".to_string();
+        }
+    } else if (value.as_str() == "WK" && board[nrow][ncol].as_str() == "WR")
+        || (value.as_str() == "BK" && board[nrow][ncol].as_str() == "BR")
+    {
+        if !king_moved {
+            if ncol.abs_diff(col) == 3 {
+                if value.as_str() == "WK" {
+                    if board[7][5].as_str() == "." && board[7][6].as_str() == "." {
+                        board[7][6] = "WK".to_string();
+                        board[7][5] = "WR".to_string();
+                        board[7][4] = ".".to_string();
+                        board[7][7] = ".".to_string();
+                        piece_move = String::from(format!("0-0"));
+                    }
+                } else if value.as_str() == "BK" {
+                    if board[0][5].as_str() == "." && board[0][6].as_str() == "." {
+                        board[0][6] = "BK".to_string();
+                        board[0][5] = "BR".to_string();
+                        board[0][4] = ".".to_string();
+                        board[0][7] = ".".to_string();
+                        piece_move = String::from(format!("0-0"));
+                    }
+                }
+            } else if ncol.abs_diff(col) == 4 {
+                if value.as_str() == "WK" {
+                    if board[7][2].as_str() == "."
+                        && board[7][2].as_str() == "."
+                        && board[7][3].as_str() == "."
+                    {
+                        board[7][2] = "WK".to_string();
+                        board[7][3] = "WR".to_string();
+                        board[7][4] = ".".to_string();
+                        board[7][0] = ".".to_string();
+                        piece_move = String::from(format!("0-0-0"));
+                    }
+                } else if value.as_str() == "BK" {
+                    if board[0][2].as_str() == "."
+                        && board[0][2].as_str() == "."
+                        && board[0][3].as_str() == "."
+                    {
+                        board[0][2] = "BK".to_string();
+                        board[0][3] = "BR".to_string();
+                        board[0][4] = ".".to_string();
+                        board[0][0] = ".".to_string();
+                        piece_move = String::from(format!("0-0-0"));
+                    }
+                }
+            }
         }
     }
 

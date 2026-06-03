@@ -82,7 +82,7 @@ pub fn checkmate(board: [[String; 8]; 8], white: bool) -> bool {
                         for row in 0..8 {
                             for col in 0..8 {
                                 if possibility[row][col] == "M" || possibility[row][col] == "C" {
-                                    let (nboard, _) = king(board.clone(), i, j, row, col);
+                                    let (nboard, _) = king(board.clone(), i, j, row, col, false);
                                     if !check(nboard, white) {
                                         return false;
                                     }
@@ -168,7 +168,7 @@ pub fn checkmate(board: [[String; 8]; 8], white: bool) -> bool {
                         for row in 0..8 {
                             for col in 0..8 {
                                 if possibility[row][col] == "M" || possibility[row][col] == "C" {
-                                    let (nboard, _) = king(board.clone(), i, j, row, col);
+                                    let (nboard, _) = king(board.clone(), i, j, row, col, false);
                                     if !check(nboard, white) {
                                         return false;
                                     }

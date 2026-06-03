@@ -49,6 +49,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
     let mut black_moves: Vec<String> = vec![];
     let mut check_mate: bool;
     let mut c: bool;
+    let mut wk_moved = false;
+    let mut bk_moved = false;
 
     loop {
         terminal.draw(|frame| {
@@ -196,10 +198,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             current_col,
                                             next_row,
                                             next_col,
+                                            wk_moved,
                                         );
 
                                         if board != nboard {
                                             if !check(nboard.clone(), true) {
+                                                wk_moved = true;
                                                 display = set_display(nboard.clone());
                                                 c = check(nboard.clone(), false);
                                                 board = nboard;
@@ -370,10 +374,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             current_col,
                                             next_row,
                                             next_col,
+                                            bk_moved,
                                         );
 
                                         if board != nboard {
                                             if !check(nboard.clone(), false) {
+                                                bk_moved = true;
                                                 display = set_display(nboard.clone());
                                                 c = check(nboard.clone(), true);
                                                 board = nboard;
