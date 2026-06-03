@@ -47,6 +47,7 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
     let mut next_col;
     let mut white_moves: Vec<String> = vec![];
     let mut black_moves: Vec<String> = vec![];
+    let mut check_mate: bool;
 
     loop {
         terminal.draw(|frame| {
@@ -117,7 +118,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = false;
-                                                white_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), false);
+                                                if check_mate {
+                                                    white_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    white_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -135,7 +141,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = false;
-                                                white_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), false);
+                                                if check_mate {
+                                                    white_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    white_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -153,7 +164,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = false;
-                                                white_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), false);
+                                                if check_mate {
+                                                    white_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    white_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -171,7 +187,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = false;
-                                                white_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), false);
+                                                if check_mate {
+                                                    white_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    white_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -189,7 +210,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = false;
-                                                white_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), false);
+                                                if check_mate {
+                                                    white_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    white_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -207,15 +233,16 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = false;
-                                                white_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), false);
+                                                if check_mate {
+                                                    white_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    white_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
                                     _ => {}
-                                }
-                                let check_mate = checkmate(board.clone(), true);
-                                if check_mate {
-                                    println!("Black wins");
                                 }
                             } else {
                                 match board[current_row][current_col].as_str() {
@@ -233,7 +260,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = true;
-                                                black_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), true);
+                                                if check_mate {
+                                                    black_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    black_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -252,7 +284,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = true;
-                                                black_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), true);
+                                                if check_mate {
+                                                    black_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    black_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -270,7 +307,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = true;
-                                                black_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), true);
+                                                if check_mate {
+                                                    black_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    black_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -289,7 +331,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = true;
-                                                black_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), true);
+                                                if check_mate {
+                                                    black_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    black_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -308,7 +355,12 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = true;
-                                                black_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), true);
+                                                if check_mate {
+                                                    black_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    black_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
@@ -326,16 +378,17 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                                 display = set_display(nboard.clone());
                                                 board = nboard;
                                                 data.white_turn = true;
-                                                black_moves.push(mv);
+                                                check_mate = checkmate(board.clone(), true);
+                                                if check_mate {
+                                                    black_moves.push(format!("{}#", mv));
+                                                } else {
+                                                    black_moves.push(mv);
+                                                }
                                             }
                                         }
                                     }
 
                                     _ => {}
-                                }
-                                let check_mate = checkmate(board.clone(), false);
-                                if check_mate {
-                                    println!("White wins");
                                 }
                             }
 
@@ -595,7 +648,7 @@ fn set_color(board: [[String; 8]; 8]) -> [[Color; 8]; 8] {
     return color_board;
 }
 
-fn check(board: [[String; 8]; 8], white: bool) -> bool {
+pub fn check(board: [[String; 8]; 8], white: bool) -> bool {
     let mut bcheck = false;
     let mut row = 0;
     let mut col = 0;
