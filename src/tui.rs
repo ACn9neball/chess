@@ -51,6 +51,10 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
     let mut c: bool;
     let mut wk_moved = false;
     let mut bk_moved = false;
+    let mut ws_castle = true;
+    let mut bs_castle = true;
+    let mut wl_castle = true;
+    let mut bl_castle = true;
 
     loop {
         terminal.draw(|frame| {
@@ -148,6 +152,15 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             if !check(nboard.clone(), true) {
                                                 display = set_display(nboard.clone());
                                                 c = check(nboard.clone(), false);
+                                                if current_row == 7 && current_col == 7 && ws_castle
+                                                {
+                                                    ws_castle = false;
+                                                } else if current_row == 7
+                                                    && current_col == 0
+                                                    && wl_castle
+                                                {
+                                                    wl_castle = false;
+                                                }
                                                 board = nboard;
                                                 data.white_turn = false;
                                                 check_mate = checkmate(board.clone(), false);
@@ -199,6 +212,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                             wk_moved,
+                                            ws_castle,
+                                            wl_castle,
                                         );
 
                                         if board != nboard {
@@ -323,6 +338,15 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             if !check(nboard.clone(), false) {
                                                 display = set_display(nboard.clone());
                                                 c = check(nboard.clone(), true);
+                                                if current_row == 0 && current_col == 7 && bs_castle
+                                                {
+                                                    bs_castle = false;
+                                                } else if current_row == 0
+                                                    && current_col == 0
+                                                    && bl_castle
+                                                {
+                                                    bl_castle = false;
+                                                }
                                                 board = nboard;
                                                 data.white_turn = true;
                                                 check_mate = checkmate(board.clone(), true);
@@ -375,6 +399,8 @@ fn run(terminal: &mut DefaultTerminal) -> color_eyre::Result<()> {
                                             next_row,
                                             next_col,
                                             bk_moved,
+                                            bs_castle,
+                                            bl_castle,
                                         );
 
                                         if board != nboard {

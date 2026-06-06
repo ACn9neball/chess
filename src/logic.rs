@@ -204,6 +204,8 @@ pub fn king(
     nrow: usize,
     ncol: usize,
     king_moved: bool,
+    s_castle: bool,
+    l_castle: bool,
 ) -> ([[String; 8]; 8], String) {
     let value = board[row][col].clone();
     let pos = position(nrow, ncol);
@@ -231,7 +233,7 @@ pub fn king(
         || (value.as_str() == "BK" && board[nrow][ncol].as_str() == "BR")
     {
         if !king_moved {
-            if ncol.abs_diff(col) == 3 {
+            if ncol.abs_diff(col) == 3 && s_castle {
                 if value.as_str() == "WK" {
                     if board[7][5].as_str() == "." && board[7][6].as_str() == "." {
                         board[7][6] = "WK".to_string();
@@ -249,11 +251,11 @@ pub fn king(
                         piece_move = String::from(format!("0-0"));
                     }
                 }
-            } else if ncol.abs_diff(col) == 4 {
+            } else if ncol.abs_diff(col) == 4 && l_castle {
                 if value.as_str() == "WK" {
                     if board[7][2].as_str() == "."
-                        && board[7][2].as_str() == "."
                         && board[7][3].as_str() == "."
+                        && board[7][4].as_str() == "."
                     {
                         board[7][2] = "WK".to_string();
                         board[7][3] = "WR".to_string();
@@ -263,8 +265,8 @@ pub fn king(
                     }
                 } else if value.as_str() == "BK" {
                     if board[0][2].as_str() == "."
-                        && board[0][2].as_str() == "."
                         && board[0][3].as_str() == "."
+                        && board[0][4].as_str() == "."
                     {
                         board[0][2] = "BK".to_string();
                         board[0][3] = "BR".to_string();
